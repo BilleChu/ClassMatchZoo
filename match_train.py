@@ -22,16 +22,17 @@ parser.add_argument(
     help="w2v file which provide w2v")
 FLAGS, unparsed = parser.parse_known_args()
 print ("unparsed: ", unparsed)
-#conf_file = sys.argv[1]
-#w2v_path = sys.argv[2]
-conf_file = FLAGS.conf_file
-w2v_path = FLAGS.w2v_path
+
+params =  {"ratio": 0.2,
+            "gram_nums": [0, 2], # - mean jieba-cut
+            "embedding_size": 100}
 loader = DataLoader()
-loader.set_w2v(w2v_path)
+loader.set_params(params)
+loader.set_w2v(FLAGS.w2v_path)
 #loader.save_dict("data/title_dict.json")
-loader.build(conf_file)
+loader.build(FLAGS.conf_file)
 train_data, train_label, test_data, test_label = loader.get_train_test()
-print (train_label, test_label)
+
 conf = { "title_features_dim": loader.word_vec_len,
          "article_features_dim": loader.word_vec_len,
          "vocab_size": len(loader.weights),

@@ -4,17 +4,17 @@ import re
 import sys
 import numpy as np
 
-def get_unigram(self, s):
+def get_unigram(s):
     return list(s)
 
-def get_bigram(self, s):
+def get_bigram(s):
     bigram, index = [], 0
     while index < len(s) - 1:
         bigram.append(s[index: index + 2])
         index += 1
     return bigram
 
-def get_trigram(self, s):
+def get_trigram(s):
     trigram, index = [], 0
     while index < len(s) - 2:
         trigram.append(s[index: index + 3])

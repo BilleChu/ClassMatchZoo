@@ -1,18 +1,7 @@
 from keras.layers import TimeDistributed, Flatten, RepeatVector, Permute, Lambda,\
                          Multiply, Concatenate, Layer, Dense, Activation
 import keras.backend as K
-'''
-def Attention(hidden_dims, x):
-    attention = TimeDistributed(Dense(1, activation='tanh'))(x)
-    attention = Flatten()(attention)
-    attention = Activation('softmax')(attention)
-    attention = RepeatVector(hidden_dims)(attention)
-    attention = Permute((2, 1))(attention)
-    x = Multiply()([x, attention])
-    x = Lambda(lambda xx: K.sum(xx, axis=1))(x)
-    return x
-
-'''                         
+                         
 class Attention(Layer):
     def __init__(self, hidden_dims, **kwargs):
         self.hidden_dims = hidden_dims
