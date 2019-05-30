@@ -3,8 +3,8 @@
 import sys
 import numpy as np
 sys.path.append("..")
-from keras.layers import Input, MaxPool1D, Permute, Embedding, Dense, Activation, Flatten, Convolution1D,\
-                         Dropout, Multiply, Concatenate, BatchNormalization, Dot, Reshape, Lambda, Add
+from keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten, \
+                         Dropout, Multiply, Concatenate, BatchNormalization, Reshape, Lambda, Permute
 
 from module.static_history import Checkpoint
 from keras.models import Model
@@ -13,21 +13,18 @@ import tensorflow as tf
 from basic_model import BasicModel
 from keras.utils import plot_model
 
-class DSSM_CNN_ATTENTION(BasicModel):
+class Match_pyramid(BasicModel):
     def __init__(self, conf):
-        super(DSSM_CNN_ATTENTION, self).__init__(conf)
+        super(Match_pyramid, self).__init__(conf)
         print("Initalizing...")
-        self.name = "DSSM_CNN_ATTENTION"
+        self.name = "Match_pyramid"
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
         print ("init completed", end="\n")
-        self.set_default("title_filter_num", 128)
-        self.set_default("title_filter_size", [3, 4, 5])
-        self.set_default("title_block_size", 2)
-        self.set_default("article_filter_num", 128)
-        self.set_default("article_filter_size", [16, 16, 32, 32])
-        self.set_default("article_block_size", 2)
+        self.set_default("filter_num", [32, 32, 32])
+        self.set_default("kernel_size", [(3, 3), (3, 3), (3, 3)])
+        self.set_default("pool_size", [(3, 3), (3, 3), (3, 3)])
         self.title_features_dim = self.get_param("title_features_dim")
         self.article_features_dim = self.get_param("article_features_dim")
         self.article_max_length = self.get_param("article_max_length")
@@ -40,18 +37,12 @@ class DSSM_CNN_ATTENTION(BasicModel):
             raise TypeError("conf should be a dict")
         self.param_val.update(conf)
 
-    def glu(self, x_layer, name):
-        x_layer = Convolution1D(self.get_param(name+"_filter_num"), self.get_param(name+"_filter_size")[0], activation='linear', padding='same')( x_layer )
-        res_layer = x_layer
-        for i in range(len(self.get_param(name+"_filter_size"))):
-            conv_layer_a = Convolution1D( self.get_param(name+"_filter_num"), self.get_param(name+"_filter_size")[i], activation='linear', padding='same')( x_layer )
-            conv_layer_b = Convolution1D( self.get_param(name+"_filter_num"), self.get_param(name+"_filter_size")[i], activation='sigmoid', padding='same')( x_layer )
-            x_layer = Multiply()( [conv_layer_a, conv_layer_b] )
-            conv_block_output_layer = Dense(self.get_param(name+"_features_dim"), activation='elu')( x_layer )  
-            if (i%self.get_param(name + "_block_size") == 0):
-                x_layer = Add()([ x_layer, res_layer ])
-                res_layer = x_layer
-        x_layer = Convolution1D(self.get_param(name+"_features_dim"), self.get_param(name+"_filter_size")[0], activation='linear', padding='same')( x_layer )
+    def pyramid(self, x_layer):
+        for i in range(len(self.get_param("kernel_size"))):
+            x_layer = Conv2D(self.get_param("filter_num")[i], self.get_param("kernel_size")[i], activation='elu')( x_layer )
+            x_layer = MaxPool2D(self.get_param("pool_size")[i])(x_layer)
+        print (x_layer.shape)
+        x_layer = Flatten()(x_layer)
         return x_layer
 
     def build(self):
@@ -65,22 +56,17 @@ class DSSM_CNN_ATTENTION(BasicModel):
         article_input = Input(shape=(self.article_max_length,), dtype='int32')
         embedded_article = embedder_article(article_input)
 
-
-        article_tower = self.glu(embedded_article, "article")
-
         ''' title model '''
         title_input = Input(shape=(self.title_max_length,), dtype='int32')
         embedded_title = embedder_article(title_input)
-        title_tower = self.glu(embedded_title, "title")
-        print (title_tower.shape)
-        title_tower = Permute((2, 1))(title_tower)
+        embedded_title = Permute((2, 1))(embedded_title)
+        #embedded_title = Reshape((self.title_features_dim, self.title_max_length))(embedded_title)
         def matmul(x):
             return K.batch_dot(x[0], x[1])
-        output = Lambda(matmul)([article_tower, title_tower])
-        print (output.shape)
-        output = MaxPool1D(pool_size=self.article_max_length, padding='valid')(output)
-        output = Reshape((self.title_max_length,))(output)
-        output = Dense(1)(output)
+        interact_layer = Lambda(matmul)([embedded_article, embedded_title])
+        interact_layer = Reshape((self.article_max_length, self.title_max_length, 1))(interact_layer)
+        interact_layer = self.pyramid(interact_layer)
+        output = Dense(1, activation='sigmoid')(interact_layer)
         self.model = Model(inputs=[article_input, title_input], outputs=output)
         self.model.compile(optimizer="adam",
                            loss="mean_squared_error",
@@ -100,10 +86,10 @@ if __name__ == "__main__":
     conf = {"title_features_dim": 100,
             "article_features_dim": 100,
             "vocab_size": 1000,
-            "article_max_length": 20,
+            "article_max_length": 200,
             "title_max_length": 250,
             "article_hidden_dims": 100,
             "title_hidden_dims": 100,
             "epochs": 100}
-    binaryClf = DSSM_CNN_ATTENTION(conf)
+    binaryClf = Match_pyramid(conf)
     binaryClf.build()

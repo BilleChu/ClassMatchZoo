@@ -37,15 +37,16 @@ class Fasttext(BasicModel):
         self.set_default("classes", 2)
         self.param_val.update(conf)
 
-    def mean(self, x):
-        return K.mean(x, axis=1)
-
     def build(self):
         input = Input((self.get_param("sequence_len"),))
         embed = Embedding(input_dim=self.get_param("vocab_size") ,
                           output_dim=self.get_param("embedding_size"),
                           weights=[self.weights], trainable=False)
         inputEmbed = embed(input)
+
+        def mean(self, x):
+            return K.mean(x, axis=1)
+
         allsum = Lambda(self.mean)(inputEmbed)
         x = Activation('sigmoid')(allsum)
         out_ = Dense(self.get_param("classes"), activation='softmax')(x)
