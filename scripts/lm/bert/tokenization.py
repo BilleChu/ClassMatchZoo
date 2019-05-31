@@ -25,14 +25,23 @@ import six
 import tensorflow as tf
 
 
-def validate_case_matches_checkpoint(do_lower_case, init_checkpoint):
+def validate_case_matches_checkpoint(FLAGS, bert_config):
   """Checks whether the casing config is consistent with the checkpoint name."""
-
+  
   # The casing has to be passed in by the user and there is no explicit check
   # as to whether it matches the checkpoint. The casing information probably
   # should have been stored in the bert_config.json file, but it's not, so
   # we have to heuristically detect it to validate.
 
+  do_lower_case = FLAGS.do_lower_case
+  init_checkpoint = FLAGS.init_checkpoint
+
+  if FLAGS.max_seq_length > bert_config.max_position_embeddings:
+    raise ValueError(
+        "Cannot use sequence length %d because the BERT model "
+        "was only trained up to sequence length %d" %
+        (FLAGS.max_seq_length, bert_config.max_position_embeddings))
+    
   if not init_checkpoint:
     return
 
