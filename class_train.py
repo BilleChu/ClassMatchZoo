@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--conf_file",
     type=str,
-    default="data/query_conf",
+    default="conf/query_conf",
     help="conf_file containes sample files and labels")
 
 parser.add_argument(

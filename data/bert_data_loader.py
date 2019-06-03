@@ -5,17 +5,17 @@ import numpy as np
 sys.path.append("..")
 from .basic_loader import *
 from sklearn.model_selection import train_test_split
-from scripts.lm.bert.tokenization import FullTokenizer, convert_to_unicode 
+from scripts.lm.bert.tokenization import FullTokenizer, convert_to_unicode
 import tensorflow as tf
 
 class BertDataLoader(BasicLoader):
     def __init__(self):
-        super(DataLoader, self).__init__()
+        super(BertDataLoader, self).__init__()
         self.classes = 0
         self.max_seq_length = 250
 
     def set_params(self, params):
-        super(DataLoader, self).set_params(params)
+        super(BertDataLoader, self).set_params(params)
         if ("max_seq_length" in params):
             self.max_seq_length = params["max_seq_length"]
         else:
@@ -34,19 +34,20 @@ class BertDataLoader(BasicLoader):
             self.classes = len(files)
             self.categories = []
             classid = 0
-            for line in files:
-                vs = line.strip().split()
+            for file in files:
+                vs = file.strip().split()
+                print (vs)
                 classname = vs[0]
                 self.categories.append(classname)
                 filename = vs[1]
                 print(classname, filename)
                 with open(filename, 'r') as sample_file:
                     print(filename, "open success!!!")
-                    for line in sample_file:
-                        convert_single_example(line.strip())
-                        label = [0.0] * self.classes # 2 classes
-                        label[int(classid)] = 1.0
-                        self.all_label_ids.append(label)
+                    for l in sample_file:
+                        self.convert_single_example(l.strip())
+                        #label = [0.0] * self.classes # 2 classes
+                        #label[int(classid)] = 1.0
+                        self.all_label_ids.append(classid)
                 classid += 1
 
     def input_fn_builder(self, features, is_training, drop_remainder):
@@ -57,23 +58,20 @@ class BertDataLoader(BasicLoader):
 
         num_examples = len(features[3])
 
-        # This is for demo purposes and does NOT scale to large data sets. We do
-        # not use Dataset.from_generator() because that uses tf.py_func which is
-        # not TPU compatible. The right way to load data is with TFRecordReader.
         d = tf.data.Dataset.from_tensor_slices({
             "input_ids":
                 tf.constant(
-                    features[0], shape=[num_examples, seq_length],
+                    features[0], shape=[num_examples, self.max_seq_length],
                     dtype=tf.int32),
             "input_mask":
                 tf.constant(
                     features[1],
-                    shape=[num_examples, seq_length],
+                    shape=[num_examples, self.max_seq_length],
                     dtype=tf.int32),
             "segment_ids":
                 tf.constant(
                     features[2],
-                    shape=[num_examples, seq_length],
+                    shape=[num_examples, self.max_seq_length],
                     dtype=tf.int32),
             "label_ids":
                 tf.constant(features[3], shape=[num_examples], dtype=tf.int32),
@@ -89,9 +87,9 @@ class BertDataLoader(BasicLoader):
       return input_fn
 
     def load_dict(self, path):
-        self.tokenizer = tokenization.FullTokenizer(vocab_file=path, do_lower_case=True)
+        self.tokenizer = FullTokenizer(vocab_file=path, do_lower_case=True)
 
-    def convert_single_example(self, line):
+    def convert_single_example(self, lines):
 
         lines = lines.split("\t")
         tokens_a = convert_to_unicode(lines[0])
@@ -104,11 +102,12 @@ class BertDataLoader(BasicLoader):
         # Modifies `tokens_a` and `tokens_b` in place so that the total
         # length is less than the specified length.
         # Account for [CLS], [SEP], [SEP] with "- 3"
-            _truncate_seq_pair(tokens_a, tokens_b, max_seq_length - 3)
+            print("token_b", tokens_b)
+            _truncate_seq_pair(tokens_a, tokens_b, self.max_seq_length - 3)
         else:
         # Account for [CLS] and [SEP] with "- 2"
-            if len(tokens_a) > max_seq_length - 2:
-            tokens_a = tokens_a[0:(max_seq_length - 2)]
+            if len(tokens_a) > self.max_seq_length - 2:
+                tokens_a = tokens_a[0:(self.max_seq_length - 2)]
 
         tokens = []
         segment_ids = []
@@ -117,39 +116,40 @@ class BertDataLoader(BasicLoader):
         for token in tokens_a:
             tokens.append(token)
             segment_ids.append(0)
-            tokens.append("[SEP]")
-            segment_ids.append(0)
+        tokens.append("[SEP]")
+        segment_ids.append(0)
 
         if tokens_b:
             for token in tokens_b:
                 tokens.append(token)
                 segment_ids.append(1)
-                tokens.append("[SEP]")
-                segment_ids.append(1)
+            tokens.append("[SEP]")
+            segment_ids.append(1)
 
-        input_ids = tokenizer.convert_tokens_to_ids(tokens)
+        input_ids = self.tokenizer.convert_tokens_to_ids(tokens)
 
       # The mask has 1 for real tokens and 0 for padding tokens. Only real
       # tokens are attended to.
         input_mask = [1] * len(input_ids)
 
       # Zero-pad up to the sequence length.
-        while len(input_ids) < max_seq_length:
+        while len(input_ids) < self.max_seq_length:
             input_ids.append(0)
             input_mask.append(0)
             segment_ids.append(0)
-
-        assert len(input_ids) == max_seq_length
-        assert len(input_mask) == max_seq_length
-        assert len(segment_ids) == max_seq_length
+      # print (self.max_seq_length, len(input_ids))
+        assert len(input_ids) == self.max_seq_length
+        assert len(input_mask) == self.max_seq_length
+        assert len(segment_ids) == self.max_seq_length
 
         self.all_input_ids.append(input_ids)
         self.all_input_mask.append(input_mask)
         self.all_segment_ids.append(segment_ids)
+        #print (self.all_input_ids)
 
     def get_train_num(self):
         return self.train_size
-        
+
     def _truncate_seq_pair(self, tokens_a, tokens_b, max_length):
       """Truncates a sequence pair in place to the maximum length."""
       while True:
@@ -163,10 +163,6 @@ class BertDataLoader(BasicLoader):
 
     def get_train_test(self):
         print ("Class Num : ", self.classes)
-                    self.all_input_ids = []
-            self.all_input_mask = []
-            self.all_segment_ids = []
-            self.all_label_ids = 
         train_inputs, test_inputs,\
         train_mask, test_mask,\
         train_segment, test_segment,\
@@ -175,6 +171,7 @@ class BertDataLoader(BasicLoader):
                                                     self.all_segment_ids, \
                                                     self.all_label_ids,\
                                                     test_size=self.ratio)
+
         self.train_size = len(train_label)
         self.test_size = len(test_label)
         return self.input_fn_builder([train_inputs, train_mask, train_segment, train_label], True, True), \

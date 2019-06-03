@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--conf_file",
     type=str,
-    default="data/match_conf",
+    default="conf/match_conf",
     help="conf_file containes sample files and labels")
 
 parser.add_argument(
