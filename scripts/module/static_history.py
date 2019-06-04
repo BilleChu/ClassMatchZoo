@@ -3,7 +3,7 @@ from sklearn.metrics import confusion_matrix
 from keras.callbacks import Callback, ModelCheckpoint, LearningRateScheduler
 import keras.backend as K
 import numpy as np
-import datatime
+import datetime
 
 class Checkpoint(ModelCheckpoint):
     def __init__(self):
