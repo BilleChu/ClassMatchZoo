@@ -4,15 +4,15 @@ import sys
 import numpy as np
 sys.path.append("..")
 
-from tensorflow.keras.layers import Input, MaxPool1D, Permute, Embedding, Dense, Activation, Flatten, Convolution1D,\
+from keras.layers import Input, MaxPool1D, Permute, Embedding, Dense, Activation, Flatten, Convolution1D,\
                          Dropout, Multiply, Concatenate, BatchNormalization, Dot, Reshape, Lambda, Add
 
 from module.static_history import Checkpoint
-from tensorflow.keras.models import Model
-import tensorflow.keras.backend as K
+from keras.models import Model
+import keras.backend as K
 import tensorflow as tf
 from basic_model import BasicModel
-from tensorflow.keras.utils import plot_model
+from keras.utils import plot_model
 
 class DSSM_CNN_ATTENTION(BasicModel):
     def __init__(self, conf):

@@ -3,13 +3,13 @@
 import sys
 sys.path.append("..")
 import tensorflow as tf
-from tensorflow.keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
+from keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
                          Dropout, Multiply, Concatenate, BatchNormalization
-from tensorflow.keras.models import Model
+from keras.models import Model
 from basic_model import BasicModel
 from module.attention import Attention
 from module.static_history import Checkpoint, StaticHistory
-import tensorflow.keras.backend as K
+import keras.backend as K
 K.set_learning_phase(1)
 
 class AttentiveTextRnn(BasicModel):

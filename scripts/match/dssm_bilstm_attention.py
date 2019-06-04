@@ -4,14 +4,14 @@ import numpy as np
 import sys
 sys.path.append("..")
 
-from tensorflow.keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
+from keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
                          Dropout, Multiply, Concatenate, BatchNormalization, Dot
 
 from module.static_history import Checkpoint
-from tensorflow.keras.models import Model
+from keras.models import Model
 from module.attention import Attention
 from basic_model import BasicModel
-import tensorflow.keras.backend as K
+import keras.backend as K
 import tensorflow as tf
 
 class DSSM_biLSTM_attention(BasicModel):

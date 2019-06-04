@@ -1,6 +1,6 @@
-from tensorflow.keras.layers import TimeDistributed, Flatten, RepeatVector, Permute, Lambda,\
+from keras.layers import TimeDistributed, Flatten, RepeatVector, Permute, Lambda,\
                          Multiply, Concatenate, Layer, Dense, Activation
-import tensorflow.keras.backend as K
+import keras.backend as K
                          
 class Attention(Layer):
     def __init__(self, hidden_dims, **kwargs):

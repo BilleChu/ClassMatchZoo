@@ -4,15 +4,15 @@ import sys
 import numpy as np
 sys.path.append("..")
 
-from tensorflow.keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten, \
+from keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten, \
                          Dropout, Multiply, Concatenate, BatchNormalization, Reshape, Lambda, Permute
 
 from module.static_history import Checkpoint
-from tensorflow.keras.models import Model
-import tensorflow.keras.backend as K
+from keras.models import Model
+import keras.backend as K
 import tensorflow as tf
 from basic_model import BasicModel
-from tensorflow.keras.utils import plot_model
+from keras.utils import plot_model
 
 class Match_pyramid(BasicModel):
     def __init__(self, conf):

@@ -7,14 +7,14 @@ import random
 sys.path.append("..")
 
 from gensim.models import KeyedVectors
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.layers import  Input, Bidirectional, LSTM, Embedding, Dense, Activation, \
+from keras.preprocessing.sequence import pad_sequences
+from keras.layers import  Input, Bidirectional, LSTM, Embedding, Dense, Activation, \
                           BatchNormalization, Dropout, Multiply, Concatenate
-from tensorflow.keras.models import Model
+from keras.models import Model
 from module.attention import Attention
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint, LrateScheduler
-import tensorflow.keras.backend as K
+import keras.backend as K
 import tensorflow as tf
 
 class binaryClassifier(BasicModel):

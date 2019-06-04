@@ -4,14 +4,14 @@ import tensorflow as tf
 import sys
 sys.path.append("..")
 
-from tensorflow.keras.layers import Embedding, Dense, Input, Dropout, Concatenate, \
+from keras.layers import Embedding, Dense, Input, Dropout, Concatenate, \
                          Activation, Conv2D, Reshape, MaxPool2D, Flatten
 
-from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam
+from keras.models import Model
+from keras.optimizers import Adam
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint, LrateScheduler
-import tensorflow.keras.backend as K
+import keras.backend as K
 K.set_learning_phase(1)
 
 class TextCnn(BasicModel):

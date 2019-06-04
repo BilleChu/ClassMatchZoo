@@ -2,14 +2,14 @@
 import tensorflow as tf
 import sys
 sys.path.append("..")
-from tensorflow.keras.layers import Embedding, Dense, Input, Lambda, Activation
-from tensorflow.keras.models import Model
-from tensorflow.keras.activations import sigmoid
-from tensorflow.keras.models import load_model
-from tensorflow.keras.optimizers import Adam
+from keras.layers import Embedding, Dense, Input, Lambda, Activation
+from keras.models import Model
+from keras.activations import sigmoid
+from keras.models import load_model
+from keras.optimizers import Adam
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint
-import tensorflow.keras.backend as K
+import keras.backend as K
 
 class Fasttext(BasicModel):
     def __init__(self, conf):

@@ -2,12 +2,12 @@
 import sys
 import tensorflow as tf
 sys.path.append("..")
-from tensorflow.keras.layers import Embedding, Dense, Input, Lambda, Activation, Conv1D
-from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam
+from keras.layers import Embedding, Dense, Input, Lambda, Activation, Conv1D
+from keras.models import Model
+from keras.optimizers import Adam
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint
-import tensorflow.keras.backend as K
+import keras.backend as K
 
 class Lr(BasicModel):
 

@@ -1,7 +1,7 @@
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
-from tensorflow.keras.callbacks import Callback, ModelCheckpoint, LearningRateScheduler
-import tensorflow.keras.backend as K
+from keras.callbacks import Callback, ModelCheckpoint, LearningRateScheduler
+import keras.backend as K
 import numpy as np
 import datetime
 
