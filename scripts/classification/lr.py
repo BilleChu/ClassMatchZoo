@@ -1,14 +1,13 @@
 #! /usr/bin python
 import sys
-import keras
 import tensorflow as tf
 sys.path.append("..")
-from keras.layers import Embedding, Dense, Input, Lambda, Activation, Conv1D
-from keras.models import Model
-from keras.optimizers import Adam
+from tensorflow.keras.layers import Embedding, Dense, Input, Lambda, Activation, Conv1D
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint
-import keras.backend as K
+import tensorflow.keras.backend as K
 
 class Lr(BasicModel):
 
@@ -24,7 +23,7 @@ class Lr(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
 
     def set_conf(self, conf):
         if not isinstance(conf, dict):

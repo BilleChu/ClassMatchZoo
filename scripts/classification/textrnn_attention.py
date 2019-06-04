@@ -2,13 +2,14 @@
 #coding:utf-8
 import sys
 sys.path.append("..")
-from keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
+import tensorflow as tf
+from tensorflow.keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
                          Dropout, Multiply, Concatenate, BatchNormalization
-from keras.models import Model
+from tensorflow.keras.models import Model
 from basic_model import BasicModel
 from module.attention import Attention
 from module.static_history import Checkpoint, StaticHistory
-import keras.backend as K
+import tensorflow.keras.backend as K
 K.set_learning_phase(1)
 
 class AttentiveTextRnn(BasicModel):
@@ -19,7 +20,7 @@ class AttentiveTextRnn(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
 
     def set_conf(self, conf):
         if not isinstance(conf, dict):

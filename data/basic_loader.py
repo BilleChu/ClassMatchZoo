@@ -35,7 +35,7 @@ class BasicLoader(object):
         self.inscript_gram_func()
 
     def inscript_gram_func(self):
-        self.gram_func.clear()
+        self.gram_func = []
         for i in self.gram_nums:
             if (0 == i):
                 self.gram_func.append(self.add_jieba_tokens)

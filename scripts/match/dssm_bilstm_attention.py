@@ -3,14 +3,15 @@
 import numpy as np
 import sys
 sys.path.append("..")
-from keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
+
+from tensorflow.keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
                          Dropout, Multiply, Concatenate, BatchNormalization, Dot
 
 from module.static_history import Checkpoint
-from keras.models import Model
+from tensorflow.keras.models import Model
 from module.attention import Attention
 from basic_model import BasicModel
-import keras.backend as K
+import tensorflow.keras.backend as K
 import tensorflow as tf
 
 class DSSM_biLSTM_attention(BasicModel):
@@ -21,7 +22,7 @@ class DSSM_biLSTM_attention(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print("init completed")
 
         self.title_features_dim = self.get_param("title_features_dim")
         self.article_features_dim = self.get_param("article_features_dim")

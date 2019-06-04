@@ -2,13 +2,14 @@
 #coding:utf-8
 import sys
 sys.path.append("..")
-from keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
+import tensorflow as tf
+from tensorflow.keras.layers import Input, Bidirectional, LSTM, Embedding, Dense, Activation,\
                          Dropout, Multiply, Concatenate, BatchNormalization
 
-from keras.models import Model
+from tensorflow.keras.models import Model
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint
-import keras.backend as K
+import tensorflow.keras.backend as K
 K.set_learning_phase(1)
 
 class TextRnn(BasicModel):
@@ -19,7 +20,7 @@ class TextRnn(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
 
     def set_conf(self, conf):
         if not isinstance(conf, dict):

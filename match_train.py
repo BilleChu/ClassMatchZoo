@@ -1,4 +1,5 @@
-#! /usr/bin python
+#!/usr/bin/python  
+#! -*- coding: utf-8 -*-
 import sys
 import os
 import numpy as np
@@ -24,10 +25,10 @@ FLAGS, unparsed = parser.parse_known_args()
 print ("unparsed: ", unparsed)
 
 params =  { "ratio"         :   0.2,
-            "gram_nums"     :   [0, 2], # - mean jieba-cut
+            "gram_nums"     :   [0], # - mean jieba-cut
             "embedding_size":   100,
-            "title_len"     :   20,
-            "article_len"   :   100 }
+            "title_len"     :   24,
+            "article_len"   :   512 }
 loader = DataLoader()
 loader.set_params(params)
 loader.set_w2v(FLAGS.w2v_path)

@@ -1,18 +1,17 @@
 #! /usr/bin python
 from __future__ import print_function
 import tensorflow as tf 
-import keras
 import sys
 sys.path.append("..")
 
-from keras.layers import Embedding, Dense, Input, Dropout, Concatenate, \
+from tensorflow.keras.layers import Embedding, Dense, Input, Dropout, Concatenate, \
                          Activation, Conv2D, Reshape, MaxPool2D, Flatten
 
-from keras.models import Model
-from keras.optimizers import Adam
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint, LrateScheduler
-import keras.backend as K
+import tensorflow.keras.backend as K
 K.set_learning_phase(1)
 
 class TextCnn(BasicModel):
@@ -28,7 +27,7 @@ class TextCnn(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
 
     def set_conf(self, conf):
         if not isinstance(conf, dict):

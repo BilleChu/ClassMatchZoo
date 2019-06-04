@@ -5,15 +5,16 @@ import numpy as np
 import sys
 import random
 sys.path.append("..")
+
 from gensim.models import KeyedVectors
-from keras.preprocessing.sequence import pad_sequences
-from keras.layers import  Input, Bidirectional, LSTM, Embedding, Dense, Activation, \
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.layers import  Input, Bidirectional, LSTM, Embedding, Dense, Activation, \
                           BatchNormalization, Dropout, Multiply, Concatenate
-from keras.models import Model
+from tensorflow.keras.models import Model
 from module.attention import Attention
 from basic_model import BasicModel
 from module.static_history import StaticHistory, Checkpoint, LrateScheduler
-import keras.backend as K
+import tensorflow.keras.backend as K
 import tensorflow as tf
 
 class binaryClassifier(BasicModel):
@@ -24,7 +25,7 @@ class binaryClassifier(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
         print(self.param_val)
         self.word_features_dim  = self.get_param("word_features_dim")
         self.char_features_dim  = self.get_param("char_features_dim")

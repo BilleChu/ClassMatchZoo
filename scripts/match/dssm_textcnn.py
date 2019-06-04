@@ -3,12 +3,13 @@
 import sys
 import numpy as np
 sys.path.append("..")
-from keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten,\
+
+from tensorflow.keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten,\
                          Dropout, Multiply, Concatenate, BatchNormalization, Dot, Reshape
 
 from module.static_history import Checkpoint
-from keras.models import Model
-import keras.backend as K
+from tensorflow.keras.models import Model
+import tensorflow.keras.backend as K
 import tensorflow as tf
 from basic_model import BasicModel
 
@@ -20,7 +21,7 @@ class DSSM_CNN(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
         self.set_default("filter_num", 32)
         self.set_default("filter_size", [3, 4, 5])
         self.title_features_dim = self.get_param("title_features_dim")

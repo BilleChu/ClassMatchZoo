@@ -3,15 +3,16 @@
 import sys
 import numpy as np
 sys.path.append("..")
-from keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten, \
+
+from tensorflow.keras.layers import Input, MaxPool2D, Conv2D, Embedding, Dense, Activation, Flatten, \
                          Dropout, Multiply, Concatenate, BatchNormalization, Reshape, Lambda, Permute
 
 from module.static_history import Checkpoint
-from keras.models import Model
-import keras.backend as K
+from tensorflow.keras.models import Model
+import tensorflow.keras.backend as K
 import tensorflow as tf
 from basic_model import BasicModel
-from keras.utils import plot_model
+from tensorflow.keras.utils import plot_model
 
 class Match_pyramid(BasicModel):
     def __init__(self, conf):
@@ -21,7 +22,7 @@ class Match_pyramid(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
         self.set_default("filter_num", [32, 32, 32])
         self.set_default("kernel_size", [(3, 3), (3, 3), (3, 3)])
         self.set_default("pool_size", [(3, 3), (3, 3), (3, 3)])

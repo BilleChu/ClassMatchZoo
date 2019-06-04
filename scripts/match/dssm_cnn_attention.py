@@ -3,15 +3,16 @@
 import sys
 import numpy as np
 sys.path.append("..")
-from keras.layers import Input, MaxPool1D, Permute, Embedding, Dense, Activation, Flatten, Convolution1D,\
+
+from tensorflow.keras.layers import Input, MaxPool1D, Permute, Embedding, Dense, Activation, Flatten, Convolution1D,\
                          Dropout, Multiply, Concatenate, BatchNormalization, Dot, Reshape, Lambda, Add
 
 from module.static_history import Checkpoint
-from keras.models import Model
-import keras.backend as K
+from tensorflow.keras.models import Model
+import tensorflow.keras.backend as K
 import tensorflow as tf
 from basic_model import BasicModel
-from keras.utils import plot_model
+from tensorflow.keras.utils import plot_model
 
 class DSSM_CNN_ATTENTION(BasicModel):
     def __init__(self, conf):
@@ -21,7 +22,7 @@ class DSSM_CNN_ATTENTION(BasicModel):
         self.set_conf(conf)
         if not self.check():
             raise TypeError("conf is not complete")
-        print ("init completed", end="\n")
+        print ("init completed")
         self.set_default("title_filter_num", 128)
         self.set_default("title_filter_size", [3, 4, 5])
         self.set_default("title_block_size", 2)
