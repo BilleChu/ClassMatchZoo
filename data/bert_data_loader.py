@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import sys
+import codecs
 import numpy as np
 sys.path.append("..")
 from .basic_loader import *
@@ -25,7 +26,7 @@ class BertDataLoader(BasicLoader):
         return self.categories
 
     def build(self, conf_file):
-        with open(conf_file, "r") as fi:
+        with codecs.open(conf_file, "r", encoding='utf8') as fi:
             files = fi.readlines()
             self.all_input_ids = []
             self.all_input_mask = []
@@ -41,12 +42,10 @@ class BertDataLoader(BasicLoader):
                 self.categories.append(classname)
                 filename = vs[1]
                 print(classname, filename)
-                with open(filename, 'r') as sample_file:
+                with codecs.open(filename, 'r', encoding='utf8') as sample_file:
                     print(filename, "open success!!!")
                     for l in sample_file:
                         self.convert_single_example(l.strip())
-                        #label = [0.0] * self.classes # 2 classes
-                        #label[int(classid)] = 1.0
                         self.all_label_ids.append(classid)
                 classid += 1
 

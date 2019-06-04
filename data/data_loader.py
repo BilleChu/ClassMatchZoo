@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import sys
+import codecs
 import numpy as np
 sys.path.append("..")
 from .basic_loader import *
@@ -23,7 +24,7 @@ class DataLoader(BasicLoader):
         return self.categories
 
     def build(self, conf_file):
-        with open(conf_file, "r") as fi:
+        with codecs.open(conf_file, "r", encoding='utf8') as fi:
             files = fi.readlines()
             self.X_list = []
             self.Y_list = []
@@ -38,7 +39,7 @@ class DataLoader(BasicLoader):
                 filename = vs[1]
                 print(classname, filename)
 
-                with open(filename, 'r') as sample_file:
+                with codecs.open(filename, 'r', encoding='utf8') as sample_file:
                     print(filename, "open success!!!")
                     for line in sample_file:
                         feat = []

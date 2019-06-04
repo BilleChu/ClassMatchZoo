@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import sys
+import codecs
 import numpy as np
 sys.path.append("..")
 from .basic_loader import *
@@ -24,7 +25,7 @@ class DataLoader(BasicLoader):
             print ("article_len default: ", self.article_len)
 
     def build(self, conf_file):
-        with open(conf_file, "r") as files:
+        with codecs.open(conf_file, "r", encoding='utf8') as files:
             self.title_list = []
             self.Y_list = []
             self.article_list = []
@@ -33,7 +34,7 @@ class DataLoader(BasicLoader):
                 id, filename = line.strip().split()
                 print(id, filename)
                 counter = 0
-                with open(filename, 'r') as sample_file:
+                with codecs.open(filename, 'r', encoding='utf8') as sample_file:
                     print(filename,"open success!!!")
                     for line in sample_file:
                         counter += 1

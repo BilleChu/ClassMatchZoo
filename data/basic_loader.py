@@ -3,6 +3,7 @@
 import jieba
 import json
 import re
+import codecs
 import numpy as np
 from tool.n_gram import get_bigram, get_unigram, get_trigram
 
@@ -50,7 +51,7 @@ class BasicLoader(object):
 
     def set_w2v(self, path='../../xx'):
         # word2vec gensim style, first line word_num&dims
-        with open(path, "r", errors='ignore') as f:
+        with codecs.open(path, "r", encoding='utf8') as f:
             index = 0
             for line in f:
                 units = line.strip().split()
@@ -74,14 +75,14 @@ class BasicLoader(object):
         return np.array(self.weights)
 
     def save_dict(self, filepath):
-        with open(filepath, "w") as fp:
+        with codecs.open(filepath, "w", encoding='utf8') as fp:
             d = sorted(self.w2index.items(), key=lambda item:item[1])
             for key, value in d:
                 fp.write(key+"\n")
 #            json.dump(self.w2index, fp)
 
     def load_dict(self, filepath):
-        with open(filepath, "r") as fp:
+        with codecs.open(filepath, "r", encoding='utf8') as fp:
             index = 0
             for key in fp:
                 self.w2index[key] = index
