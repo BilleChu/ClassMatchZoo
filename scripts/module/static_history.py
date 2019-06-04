@@ -3,11 +3,11 @@ from sklearn.metrics import confusion_matrix
 from keras.callbacks import Callback, ModelCheckpoint, LearningRateScheduler
 import keras.backend as K
 import numpy as np
-import time
+import datatime
 
 class Checkpoint(ModelCheckpoint):
     def __init__(self):
-        super(Checkpoint, self).__init__(filepath="./model/weights.{epoch:03d}-{val_acc:.4f}.hdf5", 
+        super(Checkpoint, self).__init__(filepath="model/weights.{epoch:03d}-{val_acc:.4f}.hdf5", 
                                         monitor='val_acc', 
                                         verbose=1, 
                                         save_best_only=True, 
@@ -16,11 +16,8 @@ class Checkpoint(ModelCheckpoint):
 
 class StaticHistory(Callback):
     def __init__(self, test_data, test_label, categories):
-        local_time = time.localtime()
-        self.logfile =  "log/logs_" + str(local_time.tm_mon) +\
-                        "_" + str(local_time.tm_mday) +\
-                        "_" + str(local_time.tm_hour) +\
-                        "_" + str(local_time.tm_min)
+        local_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        self.logfile =  "log/logs_" + local_time
         self.test_data = test_data
         self.test_label = test_label
         self.categories = categories

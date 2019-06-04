@@ -144,8 +144,7 @@ def input_fn_builder(features, seq_length):
 
   return input_fn
 
-
-def model_fn_builder(bert_config, init_checkpoint, save_checkpoint, layer_indexes, use_tpu,
+def model_fn_builder(bert_config, init_checkpoint, layer_indexes, use_tpu,
                      use_one_hot_embeddings):
   """Returns `model_fn` closure for TPUEstimator."""
 
@@ -297,7 +296,6 @@ def convert_examples_to_features(examples, seq_length, tokenizer):
             input_mask=input_mask,
             input_type_ids=input_type_ids))
   return features
-
 
 def _truncate_seq_pair(tokens_a, tokens_b, max_length):
   """Truncates a sequence pair in place to the maximum length."""

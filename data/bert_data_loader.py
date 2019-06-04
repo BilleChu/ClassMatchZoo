@@ -137,7 +137,7 @@ class BertDataLoader(BasicLoader):
             input_ids.append(0)
             input_mask.append(0)
             segment_ids.append(0)
-      # print (self.max_seq_length, len(input_ids))
+
         assert len(input_ids) == self.max_seq_length
         assert len(input_mask) == self.max_seq_length
         assert len(segment_ids) == self.max_seq_length
@@ -145,7 +145,7 @@ class BertDataLoader(BasicLoader):
         self.all_input_ids.append(input_ids)
         self.all_input_mask.append(input_mask)
         self.all_segment_ids.append(segment_ids)
-        #print (self.all_input_ids)
+
 
     def get_train_num(self):
         return self.train_size
