@@ -40,24 +40,24 @@ flags.DEFINE_bool(
     "Whether to lower case the input text. Should be True for uncased "
     "models and False for cased models.")
 flags.DEFINE_integer(
-    "max_seq_length", 32,
+    "max_seq_length", 512,
     "The maximum total input sequence length after WordPiece tokenization. "
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded.")
 flags.DEFINE_bool("do_train", True, "Whether to run training.")
 flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
-flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
-flags.DEFINE_integer("eval_batch_size", 16, "Total batch size for eval.")
-flags.DEFINE_integer("predict_batch_size", 16, "Total batch size for predict.")
+flags.DEFINE_integer("train_batch_size", 128, "Total batch size for training.")
+flags.DEFINE_integer("eval_batch_size", 128, "Total batch size for eval.")
+flags.DEFINE_integer("predict_batch_size", 128, "Total batch size for predict.")
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
-flags.DEFINE_float("num_train_epochs", 3.0, "Total number of training epochs to perform.")
+flags.DEFINE_float("num_train_epochs", 10.0, "Total number of training epochs to perform.")
 flags.DEFINE_float(
     "warmup_proportion", 0.1,
     "Proportion of training to perform linear learning rate warmup for. "
     "E.g., 0.1 = 10% of training.")
-flags.DEFINE_integer("save_checkpoints_steps", 5000,
+flags.DEFINE_integer("save_checkpoints_steps", 10000,
                      "How often to save the model checkpoint.")
-flags.DEFINE_integer("iterations_per_loop", 5000,
+flags.DEFINE_integer("iterations_per_loop", 10000,
                      "How many steps to make in each estimator call.")
 flags.DEFINE_bool("use_tpu", False, "Whether to use TPU or GPU/CPU.")
 flags.DEFINE_integer(

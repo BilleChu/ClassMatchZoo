@@ -35,6 +35,7 @@ class BertDataLoader(BasicLoader):
             self.classes = len(files)
             self.categories = []
             classid = 0
+            count = 0
             for file in files:
                 vs = file.strip().split()
                 print (vs)
@@ -47,6 +48,7 @@ class BertDataLoader(BasicLoader):
                     for l in sample_file:
                         self.convert_single_example(l.strip())
                         self.all_label_ids.append(classid)
+                        count += 1
                 classid += 1
 
     def input_fn_builder(self, features, is_training, drop_remainder):
@@ -101,8 +103,8 @@ class BertDataLoader(BasicLoader):
         # Modifies `tokens_a` and `tokens_b` in place so that the total
         # length is less than the specified length.
         # Account for [CLS], [SEP], [SEP] with "- 3"
-            print("token_b", tokens_b)
-            _truncate_seq_pair(tokens_a, tokens_b, self.max_seq_length - 3)
+        #    print("token_b", tokens_b)
+            self._truncate_seq_pair(tokens_a, tokens_b, self.max_seq_length - 3)
         else:
         # Account for [CLS] and [SEP] with "- 2"
             if len(tokens_a) > self.max_seq_length - 2:

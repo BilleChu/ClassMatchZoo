@@ -23,9 +23,9 @@ class Match_pyramid(BasicModel):
         if not self.check():
             raise TypeError("conf is not complete")
         print ("init completed")
-        self.set_default("filter_num", [32, 32, 32])
+        self.set_default("filter_num", [32, 32, 1])
         self.set_default("kernel_size", [(3, 3), (3, 3), (3, 3)])
-        self.set_default("pool_size", [(3, 3), (3, 3), (3, 3)])
+        self.set_default("pool_size", [(3, 1), (3, 1), (3, 1)])
         self.title_features_dim = self.get_param("title_features_dim")
         self.article_features_dim = self.get_param("article_features_dim")
         self.article_max_length = self.get_param("article_max_length")
@@ -65,7 +65,9 @@ class Match_pyramid(BasicModel):
         def matmul(x):
             return K.batch_dot(x[0], x[1])
         interact_layer = Lambda(matmul)([embedded_article, embedded_title])
+        print (interact_layer.shape)
         interact_layer = Reshape((self.article_max_length, self.title_max_length, 1))(interact_layer)
+        print (interact_layer.shape)
         interact_layer = self.pyramid(interact_layer)
         output = Dense(1, activation='sigmoid')(interact_layer)
         self.model = Model(inputs=[article_input, title_input], outputs=output)

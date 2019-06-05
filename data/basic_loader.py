@@ -51,7 +51,7 @@ class BasicLoader(object):
 
     def set_w2v(self, path='../../xx'):
         # word2vec gensim style, first line word_num&dims
-        with codecs.open(path, "r", encoding='utf8') as f:
+        with codecs.open(path, "r", encoding='utf8', errors='ignore') as f:
             index = 0
             for line in f:
                 units = line.strip().split()
